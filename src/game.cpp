@@ -50,7 +50,28 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     if (frame_duration < target_frame_duration) {
       SDL_Delay(target_frame_duration - frame_duration);
     }
+
+    // If snake is not alive, keep the screen for 2 seconds and then close the game
+    if (!snake.alive) {
+      SDL_Delay(2000);
+      break;
+    }
   }
+}
+
+void Game::End(){
+  // End of the game
+  std::cout << "Game has terminated successfully!\n";
+  std::cout << "Score: " << GetScore() << "\n";
+  std::cout << "Size: " << GetSize() << "\n";
+  if(GetScore() > record_score) {
+    std::cout << "\nCongratulations, you set a new record! Previous record was " << record_score << "\n";
+    std::cout << "Enter your name: ";
+    std::string player_name;
+    std::cin >> player_name;
+    StoreRecordData(player_name);
+    std::cout << "Your name has been stored. Bye bye!" << "\n";
+  } 
 }
 
 void Game::RetrieveRecordData(){
@@ -65,6 +86,15 @@ void Game::RetrieveRecordData(){
     linestream >> record_score >> record_player;
     std::cout << "Record: " << record_score << " (" << record_player<< ")"<< "\n";
   } 
+}
+
+void Game::StoreRecordData(std::string &player_name){
+  std::ofstream record_file;
+  record_file.open("../data/record.txt");
+  if (record_file) {
+    record_file << GetScore() << " " << player_name;
+    record_file.close();
+  }
 }
 
 void Game::PlaceFood() {

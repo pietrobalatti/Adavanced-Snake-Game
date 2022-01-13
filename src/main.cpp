@@ -2,6 +2,7 @@
 #include "controller.h"
 #include "game.h"
 #include "renderer.h"
+#include <memory>
 
 int main() {
   constexpr std::size_t kFramesPerSecond{60};
@@ -11,12 +12,15 @@ int main() {
   constexpr std::size_t kGridWidth{32};
   constexpr std::size_t kGridHeight{32};
 
-  Renderer renderer(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
+  // Instantiated as unique pointer to destroyed at the end
+  auto renderer = std::make_unique<Renderer>(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
   Controller controller;
   Game game(kGridWidth, kGridHeight);
-  game.Run(controller, renderer, kMsPerFrame);
-  std::cout << "Game has terminated successfully!\n";
-  std::cout << "Score: " << game.GetScore() << "\n";
-  std::cout << "Size: " << game.GetSize() << "\n";
+  game.Run(controller, *renderer, kMsPerFrame);
+
+  // After 2 seconds window will get destroyed
+  renderer.reset();
+
+  game.End();
   return 0;
 }

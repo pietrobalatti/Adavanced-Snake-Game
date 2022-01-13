@@ -6,6 +6,8 @@ This game was designed to complete the Capstone project in the [Udacity C++ Nano
 ## Satisfied criteria
 1. **"The project reads data from a file and process the data, or the program writes data to a file"**  
  The game stores and reads data relative to the record score and player, offering the chance to enter the player name when he/she achieves a score that is higher w.r.t. the current record.
+2. **"The project uses smart pointers instead of raw pointers."**
+ In main.cpp, "renderer" is instantiated as unique pointer, like this at the end of the game, a reset() is called to this object. In this way, the object deconstructor is called, the game windows terminates, and the user is able to see the terminal. Like this, the user can enter his/her name if he broke the current record.
 
 ## Dependencies for Running Locally
 * cmake >= 3.7

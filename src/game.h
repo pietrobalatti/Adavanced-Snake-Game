@@ -12,6 +12,7 @@ class Game {
   Game(std::size_t grid_width, std::size_t grid_height);
   void Run(Controller const &controller, Renderer &renderer,
            std::size_t target_frame_duration);
+  void End();
   int GetScore() const;
   int GetSize() const;
   int GetRecord() const;
@@ -31,6 +32,7 @@ class Game {
   std::string record_player{"No one!"};
   
   void RetrieveRecordData();
+  void StoreRecordData(std::string &player_name);
   void PlaceFood();
   void Update();
 };
