@@ -1,12 +1,15 @@
 #include "game.h"
 #include <iostream>
 #include "SDL.h"
+#include <fstream>
+#include <sstream>
 
 Game::Game(std::size_t grid_width, std::size_t grid_height)
     : snake(grid_width, grid_height),
       engine(dev()),
       random_w(0, static_cast<int>(grid_width - 1)),
       random_h(0, static_cast<int>(grid_height - 1)) {
+  RetrieveRecordData();
   PlaceFood();
 }
 
@@ -36,7 +39,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 
     // After every second, update the window title.
     if (frame_end - title_timestamp >= 1000) {
-      renderer.UpdateWindowTitle(score, frame_count);
+      renderer.UpdateWindowTitle(score, record_score, record_player, frame_count);
       frame_count = 0;
       title_timestamp = frame_end;
     }
@@ -48,6 +51,20 @@ void Game::Run(Controller const &controller, Renderer &renderer,
       SDL_Delay(target_frame_duration - frame_duration);
     }
   }
+}
+
+void Game::RetrieveRecordData(){
+  // Read record data from file
+  std::ifstream record_file;
+  record_file.open("../data/record.txt");
+  if (record_file) {
+    std::cout << "Reading data from \"record\" file..." << "\n";
+    std::string line;
+    getline(record_file, line);
+    std::istringstream linestream(line);
+    linestream >> record_score >> record_player;
+    std::cout << "Record: " << record_score << " (" << record_player<< ")"<< "\n";
+  } 
 }
 
 void Game::PlaceFood() {
@@ -85,3 +102,5 @@ void Game::Update() {
 
 int Game::GetScore() const { return score; }
 int Game::GetSize() const { return snake.size; }
+int Game::GetRecord() const { return record_score; }
+std::string Game::GetRecordPlayer() const { return record_player; }
