@@ -31,10 +31,13 @@ void Game::Run(Controller const &controller, Renderer &renderer,
       renderer.Render(selection);
       if(selection == Controller::Selection::Enter)
         welcome_window = false;
-    }else{
+    }else if (snake.alive) {
       controller.HandleInput(running, snake);
       Update();
       renderer.Render(snake, food);
+    }else{
+      renderer.RenderEndScreen();
+      window_destruction = true;
     }
 
     frame_end = SDL_GetTicks();
@@ -58,8 +61,8 @@ void Game::Run(Controller const &controller, Renderer &renderer,
       SDL_Delay(target_frame_duration - frame_duration);
     }
 
-    // If snake is not alive, keep the screen for 2 seconds and then close the game
-    if (!snake.alive) {
+    // If end window has been rendered, keep the screen for 2 seconds and then close the game
+    if (window_destruction) {
       SDL_Delay(2000);
       break;
     }

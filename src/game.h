@@ -23,6 +23,7 @@ class Game {
   Snake snake;
   SDL_Point food;
   bool welcome_window{true};
+  bool window_destruction{false};
 
   std::random_device dev;
   std::mt19937 engine;

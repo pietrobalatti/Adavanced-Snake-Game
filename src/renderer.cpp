@@ -83,6 +83,37 @@ void Renderer::Render(Controller::Selection const &selection) {
   SDL_RenderPresent(sdl_renderer);
 }
 
+void Renderer::RenderEndScreen() {
+  SDL_Rect block;
+  block.w = screen_width / grid_width;
+  block.h = screen_height / grid_height;
+
+  // Clear screen
+  SDL_SetRenderDrawColor(sdl_renderer, 0x1E, 0x1E, 0x1E, 0xFF);
+  SDL_RenderClear(sdl_renderer);
+
+  // Render message
+  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xCC, 0x00, 0xFF);
+
+  // TODO: Move this somewhere else
+  // Build welcome msg, extracted from a 20x20 grid
+  std::vector<SDL_Point> end_msg;
+  std::string file_path{"../data/end_msg.grid"};
+  ReadBoardFile(file_path, end_msg);
+
+  int offset_x = grid_width/2 - 10;
+  int offset_y = grid_width/2 - 10;
+
+  for (SDL_Point const &point : end_msg) {
+    block.x = (offset_x + point.x) * block.w;
+    block.y = (offset_y + point.y) * block.h;
+    SDL_RenderFillRect(sdl_renderer, &block);
+  }
+
+  // Update Screen
+  SDL_RenderPresent(sdl_renderer);
+}
+
 void Renderer::Render(Snake const snake, SDL_Point const &food) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
@@ -134,7 +165,7 @@ void Renderer::ReadBoardFile(std::string &path, std::vector<SDL_Point> &welcome_
   int n;
   int raw{0};
   int col{0};
-  msg_file.open("../data/welcome_msg.grid");
+  msg_file.open(path);
   if (msg_file) {
     std::string line;
     while (getline(msg_file, line)) {

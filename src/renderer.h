@@ -15,6 +15,7 @@ class Renderer {
 
   void Render(Snake const snake, SDL_Point const &food);
   void Render(Controller::Selection const &selection);
+  void RenderEndScreen();
   void UpdateWindowTitle(int score, int record_score, std::string record_player, int fps);
 
  private:
