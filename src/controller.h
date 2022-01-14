@@ -5,7 +5,11 @@
 
 class Controller {
  public:
+
+  enum class Selection { OnePlayer, TwoPlayers, Enter };
+
   void HandleInput(bool &running, Snake &snake) const;
+  void HandleInput(bool &running, Selection &selection) const;
 
  private:
   void ChangeDirection(Snake &snake, Snake::Direction input,

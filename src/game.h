@@ -17,10 +17,12 @@ class Game {
   int GetSize() const;
   int GetRecord() const;
   std::string GetRecordPlayer() const;
+  Controller::Selection selection = Controller::Selection::OnePlayer;
 
  private:
   Snake snake;
   SDL_Point food;
+  bool welcome_window{true};
 
   std::random_device dev;
   std::mt19937 engine;

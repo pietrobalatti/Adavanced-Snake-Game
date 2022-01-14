@@ -1,5 +1,7 @@
 #include "renderer.h"
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
 
 Renderer::Renderer(const std::size_t screen_width,
@@ -36,6 +38,49 @@ Renderer::Renderer(const std::size_t screen_width,
 Renderer::~Renderer() {
   SDL_DestroyWindow(sdl_window);
   SDL_Quit();
+}
+
+
+void Renderer::Render(Controller::Selection const &selection) {
+  SDL_Rect block;
+  block.w = screen_width / grid_width;
+  block.h = screen_height / grid_height;
+
+  // Clear screen
+  SDL_SetRenderDrawColor(sdl_renderer, 0x1E, 0x1E, 0x1E, 0xFF);
+  SDL_RenderClear(sdl_renderer);
+
+  // Render message
+  SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xCC, 0x00, 0xFF);
+
+  // TODO: Move this somewhere else
+  // Build welcome msg, extracted from a 20x20 grid
+  std::vector<SDL_Point> welcome_msg;
+  std::string file_path{"../data/welcome_msg.grid"};
+  ReadBoardFile(file_path, welcome_msg);
+
+  int offset_x = grid_width/2 - 10;
+  int offset_y = grid_width/2 - 10;
+
+  for (SDL_Point const &point : welcome_msg) {
+    block.x = (offset_x + point.x) * block.w;
+    block.y = (offset_y + point.y) * block.h;
+    SDL_RenderFillRect(sdl_renderer, &block);
+  }
+
+  // Render selection
+  SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
+  if(selection == Controller::Selection::OnePlayer){
+    block.x = (offset_x + 3) * block.w;
+    block.y = (offset_y + 5) * block.h;
+  }else{
+    block.x = (offset_x + 3) * block.w;
+    block.y = (offset_y + 14) * block.h;
+  }
+  SDL_RenderFillRect(sdl_renderer, &block);
+
+  // Update Screen
+  SDL_RenderPresent(sdl_renderer);
 }
 
 void Renderer::Render(Snake const snake, SDL_Point const &food) {
@@ -82,4 +127,31 @@ void Renderer::UpdateWindowTitle(int score, int record_score, std::string record
   //title+= "\t\t(FPS: " + std::to_string(fps) + ")";
 
   SDL_SetWindowTitle(sdl_window, title.c_str());
+}
+
+void Renderer::ReadBoardFile(std::string &path, std::vector<SDL_Point> &welcome_msg) {
+  std::ifstream msg_file;
+  int n;
+  int raw{0};
+  int col{0};
+  msg_file.open("../data/welcome_msg.grid");
+  if (msg_file) {
+    std::string line;
+    while (getline(msg_file, line)) {
+      // std::cout << "line " << raw << ": " << line << "\n";
+      // Line parsing
+      std::istringstream sline(line);
+      while (sline >> n) {
+        // If point is one, push into vector
+        if (n == 1) {
+          SDL_Point point{col,raw};
+          welcome_msg.push_back(point);
+        }
+        col++;
+      }
+      // Reset col and increase raw
+      col = 0;
+      raw++;
+    }
+  }
 }

@@ -39,3 +39,25 @@ void Controller::HandleInput(bool &running, Snake &snake) const {
     }
   }
 }
+
+void Controller::HandleInput(bool &running, Selection &selection) const {
+  SDL_Event e;
+  while (SDL_PollEvent(&e)) {
+    if (e.type == SDL_QUIT) {
+      running = false;
+    } else if (e.type == SDL_KEYDOWN) {
+      switch (e.key.keysym.sym) {
+        case SDLK_UP:
+        case SDLK_DOWN:
+          if(selection == Selection::OnePlayer)
+            selection = Selection::TwoPlayers;
+          else
+            selection = Selection::OnePlayer;
+          break;
+        case SDLK_RETURN:
+        case SDLK_KP_ENTER:
+            selection = Selection::Enter;
+      }
+    }
+  }
+}

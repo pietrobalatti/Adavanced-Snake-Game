@@ -4,6 +4,7 @@
 #include <vector>
 #include "SDL.h"
 #include "snake.h"
+#include "controller.h"
 #include <string>
 
 class Renderer {
@@ -13,6 +14,7 @@ class Renderer {
   ~Renderer();
 
   void Render(Snake const snake, SDL_Point const &food);
+  void Render(Controller::Selection const &selection);
   void UpdateWindowTitle(int score, int record_score, std::string record_player, int fps);
 
  private:
@@ -23,6 +25,8 @@ class Renderer {
   const std::size_t screen_height;
   const std::size_t grid_width;
   const std::size_t grid_height;
+
+  void ReadBoardFile(std::string &path, std::vector<SDL_Point> &welcome_msg);
 };
 
 #endif
