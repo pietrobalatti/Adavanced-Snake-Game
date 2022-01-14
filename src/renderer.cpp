@@ -70,12 +70,19 @@ void Renderer::Render(Controller::Selection const &selection) {
 
   // Render selection
   SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x7A, 0xCC, 0xFF);
-  if(selection == Controller::Selection::OnePlayer){
-    block.x = (offset_x + 3) * block.w;
-    block.y = (offset_y + 5) * block.h;
-  }else{
-    block.x = (offset_x + 3) * block.w;
-    block.y = (offset_y + 14) * block.h;
+  switch(selection) {
+    case Controller::Selection::Easy:
+      block.x = (offset_x - 2) * block.w;
+      block.y = (offset_y + 3) * block.h;
+      break;
+    case Controller::Selection::Std:
+      block.x = (offset_x - 2) * block.w;
+      block.y = (offset_y + 9) * block.h;
+      break;
+    case Controller::Selection::Hard:
+      block.x = (offset_x - 2) * block.w;
+      block.y = (offset_y + 15) * block.h;
+      break;
   }
   SDL_RenderFillRect(sdl_renderer, &block);
 
@@ -151,12 +158,7 @@ void Renderer::Render(Snake const snake, SDL_Point const &food) {
   SDL_RenderPresent(sdl_renderer);
 }
 
-void Renderer::UpdateWindowTitle(int score, int record_score, std::string record_player,  int fps) {
-  // Print actual score and also stored record
-  std::string title{"Snake Score: " + std::to_string(score) + "\t\tRecord: " + std::to_string(record_score) + " (" + record_player + ")"};
-  // Uncomment this if you want to print FPS as well
-  //title+= "\t\t(FPS: " + std::to_string(fps) + ")";
-
+void Renderer::UpdateWindowTitle(std::string title) {
   SDL_SetWindowTitle(sdl_window, title.c_str());
 }
 
@@ -185,4 +187,11 @@ void Renderer::ReadBoardFile(std::string &path, std::vector<SDL_Point> &welcome_
       raw++;
     }
   }
+}
+
+void Renderer::setScreenSize(const std::size_t &s_width, const std::size_t &s_height) {
+  this->screen_width = s_width;
+  this->screen_height = s_height;
+  SDL_SetWindowSize(sdl_window, screen_width, screen_height);
+  SDL_SetWindowPosition(sdl_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 }

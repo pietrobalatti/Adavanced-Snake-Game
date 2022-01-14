@@ -16,16 +16,19 @@ class Renderer {
   void Render(Snake const snake, SDL_Point const &food);
   void Render(Controller::Selection const &selection);
   void RenderEndScreen();
-  void UpdateWindowTitle(int score, int record_score, std::string record_player, int fps);
+  void UpdateWindowTitle(std::string title);
+
+  // Setter
+  void setScreenSize(const std::size_t &s_width, const std::size_t &s_height);
 
  private:
   SDL_Window *sdl_window;
   SDL_Renderer *sdl_renderer;
 
-  const std::size_t screen_width;
-  const std::size_t screen_height;
-  const std::size_t grid_width;
-  const std::size_t grid_height;
+  std::size_t screen_width;
+  std::size_t screen_height;
+  std::size_t grid_width;
+  std::size_t grid_height;
 
   void ReadBoardFile(std::string &path, std::vector<SDL_Point> &welcome_msg);
 };

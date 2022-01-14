@@ -17,7 +17,7 @@ class Game {
   int GetSize() const;
   int GetRecord() const;
   std::string GetRecordPlayer() const;
-  Controller::Selection selection = Controller::Selection::OnePlayer;
+  Controller::Selection selection = Controller::Selection::Easy;
 
  private:
   Snake snake;
@@ -33,11 +33,13 @@ class Game {
   int score{0};
   int record_score{0};
   std::string record_player{"No one!"};
+  Controller::Selection prev_selection = Controller::Selection::Easy;
   
   void RetrieveRecordData();
   void StoreRecordData(std::string &player_name);
   void PlaceFood();
   void Update();
+  void setMode(Renderer &renderer, Controller::Selection &prev_selection);
 };
 
 #endif

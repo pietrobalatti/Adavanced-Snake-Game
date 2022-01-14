@@ -29,8 +29,11 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     if(welcome_window){
       controller.HandleInput(running, selection);
       renderer.Render(selection);
-      if(selection == Controller::Selection::Enter)
+      if(selection == Controller::Selection::Enter){
         welcome_window = false;
+        setMode(renderer, prev_selection);
+      }
+      prev_selection = selection;
     }else if (snake.alive) {
       controller.HandleInput(running, snake);
       Update();
@@ -42,14 +45,22 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 
     frame_end = SDL_GetTicks();
 
-    // Keep track of how long each loop through the input/update/render cycle
-    // takes.
+    // Keep track of how long each loop through the input/update/render cycle takes.
     frame_count++;
     frame_duration = frame_end - frame_start;
 
     // After every second, update the window title.
     if (frame_end - title_timestamp >= 1000) {
-      renderer.UpdateWindowTitle(score, record_score, record_player, frame_count);
+      std::string title;
+      if(welcome_window)
+        title = "Select mode";
+      else{
+        // Print actual score and also stored record
+        title = "Snake Score: " + std::to_string(score) + "\t\tRecord: " + std::to_string(record_score) + " (" + record_player + ")";
+        // Uncomment this if you want to print FPS as well
+        //title+= "\t\t(FPS: " + std::to_string(fps) + ")";
+      }
+      renderer.UpdateWindowTitle(title);
       frame_count = 0;
       title_timestamp = frame_end;
     }
@@ -138,6 +149,32 @@ void Game::Update() {
     snake.GrowBody();
     snake.speed += 0.02;
   }
+}
+
+void Game::setMode(Renderer &renderer, Controller::Selection &prev_selection) {
+  std::size_t width;
+  std::size_t height;
+  switch (prev_selection)
+  {
+  case Controller::Selection::Easy:
+    width = 800;
+    height = 800;
+    break;
+
+  case Controller::Selection::Std:
+    width = 640;
+    height = 640;
+    break;
+
+  case Controller::Selection::Hard:
+    width = 400;
+    height = 400;
+    break;
+  
+  default:
+    break;
+  }
+  renderer.setScreenSize(width, height);
 }
 
 int Game::GetScore() const { return score; }

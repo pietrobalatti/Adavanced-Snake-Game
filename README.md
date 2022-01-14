@@ -1,5 +1,12 @@
-# Multiplayer Snake Game
+# Advanced Snake Game
 This game was designed to complete the Capstone project in the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). The code for this repo was inspired by [this](https://codereview.stackexchange.com/questions/212296/snake-game-in-c-with-sdl) excellent StackOverflow post and set of responses.
+
+With respect to the original game, this version:
+- allows the user to select the difficulty among "easy, standard, hard", this impacts directly on the grid dimension
+- renders the record score and player
+- asks the user to enter his/her name once a new record is achieved
+- show a "Game Over" window, when the player loses
+- automatically destroys the window after the prevous above-mentioned "Game Over" windows has been shown for 2 seconds
 
 <img src="snake_game.gif"/>
 
@@ -8,11 +15,11 @@ This game was designed to complete the Capstone project in the [Udacity C++ Nano
  The game stores and reads data relative to the record score and player, offering the chance to enter the player name when he/she achieves a score that is higher w.r.t. the current record.
 2. **"The project uses smart pointers instead of raw pointers."**
  In main.cpp, "renderer" is instantiated as unique pointer, like this at the end of the game, a reset() is called to this object. In this way, the object deconstructor is called, the game windows terminates, and the user is able to see the terminal. Like this, the user can enter his/her name if he broke the current record.
- 3. **"The project accepts user input and processes the input."**
+3. **"The project accepts user input and processes the input."**
  When the game is launched, a welcome windows is shown, where the user can select various options.
- 4. **"The project makes use of references in function declarations."**
+4. **"The project makes use of references in function declarations."**
  Multiple functions use pass-by-reference in the project, e.g. Renderer:ReadBoardFile, Game::StoreRecordData, overloaded function Controller::HandleInput, ...
- 5. **"Overloaded functions allow the same function to operate on different parameters."**
+5. **"Overloaded functions allow the same function to operate on different parameters."**
  Functions Controller::HandleInput and Renderer:Render are overloaded with different signatures.
 
 

@@ -47,16 +47,36 @@ void Controller::HandleInput(bool &running, Selection &selection) const {
       running = false;
     } else if (e.type == SDL_KEYDOWN) {
       switch (e.key.keysym.sym) {
-        case SDLK_UP:
         case SDLK_DOWN:
-          if(selection == Selection::OnePlayer)
-            selection = Selection::TwoPlayers;
-          else
-            selection = Selection::OnePlayer;
+          switch(selection) {
+            case Selection::Easy:
+              selection = Selection::Std;
+              break;
+            case Selection::Std:
+              selection = Selection::Hard;
+              break;
+            case Selection::Hard:
+              selection = Selection::Easy;
+              break;
+          }
+          break;
+        case SDLK_UP:
+          switch(selection) {
+            case Selection::Easy:
+              selection = Selection::Hard;
+              break;
+            case Selection::Std:
+              selection = Selection::Easy;
+              break;
+            case Selection::Hard:
+              selection = Selection::Std;
+              break;
+          }
           break;
         case SDLK_RETURN:
         case SDLK_KP_ENTER:
             selection = Selection::Enter;
+            break;
       }
     }
   }
