@@ -15,7 +15,8 @@ int main() {
   // Instantiated as unique pointer to destroyed at the end
   auto renderer = std::make_unique<Renderer>(kScreenWidth, kScreenHeight, kGridWidth, kGridHeight);
   Controller controller;
-  Game game(kGridWidth, kGridHeight);
+  Game game;
+  game.Init(controller, *renderer, kMsPerFrame);
   game.Run(controller, *renderer, kMsPerFrame);
 
   // After 2 seconds window will get destroyed

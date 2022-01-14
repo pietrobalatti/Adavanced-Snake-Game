@@ -9,7 +9,10 @@
 
 class Game {
  public:
-  Game(std::size_t grid_width, std::size_t grid_height);
+  Game();
+  void Init(Controller const &controller, Renderer &renderer,
+           std::size_t target_frame_duration);
+  void InitializeData();
   void Run(Controller const &controller, Renderer &renderer,
            std::size_t target_frame_duration);
   void End();
@@ -30,16 +33,19 @@ class Game {
   std::uniform_int_distribution<int> random_w;
   std::uniform_int_distribution<int> random_h;
 
+  int grid_width;
+  int grid_height;
   int score{0};
   int record_score{0};
   std::string record_player{"No one!"};
-  Controller::Selection prev_selection = Controller::Selection::Easy;
+  Controller::Selection game_mode = Controller::Selection::Easy;
+  std::vector<std::string> record_files{"record_easy.txt","record_std.txt","record_hard.txt"};
   
   void RetrieveRecordData();
   void StoreRecordData(std::string &player_name);
   void PlaceFood();
   void Update();
-  void setMode(Renderer &renderer, Controller::Selection &prev_selection);
+  void setMode(Renderer &renderer, Controller::Selection &game_mode);
 };
 
 #endif

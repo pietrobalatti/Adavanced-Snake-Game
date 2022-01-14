@@ -20,6 +20,7 @@ class Renderer {
 
   // Setter
   void setScreenSize(const std::size_t &s_width, const std::size_t &s_height);
+  void setGridSize(const std::size_t &g_width, const std::size_t &g_height);
 
  private:
   SDL_Window *sdl_window;

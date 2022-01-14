@@ -195,3 +195,8 @@ void Renderer::setScreenSize(const std::size_t &s_width, const std::size_t &s_he
   SDL_SetWindowSize(sdl_window, screen_width, screen_height);
   SDL_SetWindowPosition(sdl_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
 }
+
+void Renderer::setGridSize(const std::size_t &g_width, const std::size_t &g_height) {
+  this->grid_width = g_width;
+  this->grid_height = g_height;
+}
